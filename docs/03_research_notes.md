@@ -1,0 +1,23 @@
+# Research Notes
+
+Status: Draft v0, written 2026-11-09. Research was done with standard web searches that returned summaries; the full pages and repositories were not opened. Treat details as leads to verify. Goals and decisions these notes support are in `00_charter.md` and `01_workflow.md`.
+
+Confidence labels: **peer-reviewed or primary** (a study or its authors' write-up), **community** (fan or hobbyist write-up), **inference** (reasoning not backed by a source found).
+
+## Balatro randomness
+- Community analyses of the decompiled game describe `pseudoseed(key)`, a function that hashes a string key to seed a generator. Each purpose (shop jokers, booster packs, the tarot Judgement, and so on) has its own queue per ante, and jokers have a separate resample queue per rarity. Locked or already-owned items cause resampling. Confidence: **community**; versions differ, so check before copying details.
+- Why it matters here: it is the basis for the decision to keep separate seeded streams per purpose.
+- Sources: [balatro pseudorandom (rennsax)](https://rennsax.github.io/posts/balatro-pseudorandom), [Balatro RNG Mechanics Guide](https://gameplay.tips/guides/balatro-rng-mechanics-guide.html).
+
+## Exemplar projects
+- A JavaScript rebuild of Balatro described on dev.to proposes a score object holding chips and multiplier, about four injection points where jokers apply effects, and keeping joker logic inside the joker classes. It notes that the order effects apply in changes the result. Confidence: **community**, one blog post, no effort data. [Article](https://dev.to/michi/rule-changing-poker-game-balatro-recreated-in-javascript-behind-the-code-42bg).
+- `balatro-rs`: a simplified Balatro engine in Rust with an exhaustive legal-move generator and Python bindings for the Gymnasium reinforcement-learning interface; it uses a fixed-size array marking valid actions. Coverage in the results was poker hands, scoring, playing, discarding and reordering; unclear whether jokers are included. Confidence: **community**. [Project page](https://36f33348.evanslack-dev.pages.dev/projects/balatro-rs).
+- **Inference, not sourced:** costs are front-loaded. The scoring pipeline and joker effect ordering are the hard parts, and each added joker becomes cheaper once they work. No source with sprint counts or effort for a similar clone was found.
+
+## AI use and learning
+- Anthropic randomized trial, "How AI Impacts Skill Formation" (about 52 engineers learning an unfamiliar Python library, one-hour task, chat-based AI). Participants who fully delegated scored about 39% on a follow-up quiz; three interaction patterns scored 24 to 39% and three scored 65 to 86%. The best pattern generated code, then asked specific follow-up questions. AI did not make completion significantly faster. Caveats: small sample, short task, and the authors' pattern analysis is not causal. Confidence: **primary**. [Anthropic write-up](https://www.anthropic.com/research/AI-assistance-coding-skills), [paper](https://www.arxiv.org/pdf/2601.20245).
+- Worked examples with fading (removing solution steps over time, often the last steps first) improved learning in several studies, including small programming studies (for example 33 students). The expertise reversal effect: examples help less, and can hurt, as the learner's expertise grows. Practical reading: attempt first, with an example available. Confidence: **peer-reviewed**, mostly small samples. [Adaptive fading study](https://faculty.engineering.asu.edu/mre/wp-content/uploads/sites/31/2020/02/Stat_Adapt_Fad_JEE06.pdf), [programming study](https://openaccess.hacettepe.edu.tr/handle/11655/5961).
+- Deliberate practice in programming is hard because feedback is delayed; suggested remedies include mirroring teacher and student in code review and pair programming. An eye-tracking study found advanced programmers detect errors better than novices, attributed to better mental models of the code. Practical reading: the owner's early reviews of AI code will miss defects, so use a checklist and consider planted bugs for a baseline. Confidence: **peer-reviewed or thesis-level**, mostly abstracts. [Barriers to deliberate practice](https://arxiv.org/pdf/1311.0390), [Turku paper](https://research.utu.fi/converis/portal/detail/Publication/50118364?lang=en_US).
+
+## Not searched yet
+Retrieval practice and self-explanation in programming education; sprint velocity and commitment-reliability evidence (the "about 80%" figure in `00_charter.md` is a working target, not sourced); full contents of the dev.to article and `balatro-rs` repository; how any open-source clone structures joker effects in code.
